@@ -119,6 +119,7 @@ var basicCharacter = {
         if(this.model.position.y > 999){
           alert("You Won!");
           this.y = 10;
+          this.x = 0;
           this.model.position.set(this.x, this.y, 0);
           this.hitBox.position.set(this.x, this.y, 0);
         }

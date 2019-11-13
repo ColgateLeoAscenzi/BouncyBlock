@@ -363,6 +363,7 @@ function initGame() {
 
   createPlayer1(0, 10, 0);
 
+  createConfetti();
 
   loop();
 }
@@ -456,16 +457,16 @@ function handleKeyDown(keyEvent){
    }
 
    if(keyEvent.key == "o"){
-       if(confettiOn){
-           confettiOn = false;
-           for(var i = 0; i < confetti.length; i++){
-               scene.remove(confetti[i]);
-           }
-       }
-       else{
-           createConfetti();
-           confettiOn = true;
-       }
+       // if(confettiOn){
+       //     confettiOn = false;
+       //     for(var i = 0; i < confetti.length; i++){
+       //         scene.remove(confetti[i]);
+       //     }
+       // }
+       // else{
+       //     createConfetti();
+       //     confettiOn = true;
+       // }
    }
 
 
