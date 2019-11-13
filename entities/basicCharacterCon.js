@@ -12,7 +12,7 @@ var basicCharacter = {
     hitBoxEnabled: false,
     canJump: true,
     jumpCt: 0,
-    maxJumpCt: 2,
+    maxJumpCt: 3,
     jumpSpeed: 1.8,
     walkSpeed: 1,
     onGround: true,
@@ -111,6 +111,7 @@ var basicCharacter = {
         //updates models position and hitbox
         this.model.position.set(this.x, this.y, 0);
         this.hitBox.position.set(this.x, this.y, 0);
+        document.getElementById("counter").innerHTML = "Current Floor: " + Math.floor(this.y/10);
 
 
 

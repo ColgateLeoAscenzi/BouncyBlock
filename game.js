@@ -102,11 +102,11 @@ var boxRight;
 
 
 
-function createBox(x, y, z) {
+function createBox(x, y, z, color) {
 
   basicBoxMesh = basicBox.model.clone();
   basicBoxMesh.material = new THREE.MeshPhongMaterial(
-                             { color : Colors.grey});
+                             { color : color});
   basicBoxMesh.position.set(x, y, z);
   // basicBox.x = x;
   // basicBox.y = y;
@@ -127,17 +127,30 @@ function createBox(x, y, z) {
 function createSimpleMap(){
   for(var i = -5; i < 6; i++){
     if(i == -5 || i == 5){
-      createBox(i*basicBox.width, basicBox.height, 0);
-      createBox(i*basicBox.width, basicBox.height*2, 0);
+      createBox(i*basicBox.width, basicBox.height, 0, Colors.grey);
+      createBox(i*basicBox.width, basicBox.height*2, 0, Colors.grey);
     }
     if(i == 0){
-      createBox(i*basicBox.width, 0, 0);
-      createBox(i*basicBox.width, basicBox.height*3, 0);
+      createBox(i*basicBox.width, 0, 0, Colors.grey);
+      createBox(i*basicBox.width, basicBox.height*3, 0, Colors.grey);
     }
     else{
-      createBox(i*basicBox.width, 0, 0);
+      createBox(i*basicBox.width, 0, 0, Colors.grey);
     }
   }
+
+  var decide = 0;
+  for(var i = 3; i < 100; i+=2){
+
+    for(var j = -5; j < 6; j++){
+      decide = Math.random();
+      if(decide > 0.8){
+        createBox(j*basicBox.width, i*basicBox.height, 0, Math.random()*0xffffff);
+
+      }
+    }
+  }
+
 }
 function createPlayer1(x, y, z){
   player1 = basicCharacter;
@@ -210,7 +223,7 @@ function lookBelow(){
     // creates a vector from the player to some point way below
     var positionBelow = new THREE.Vector3();
     positionBelow.x = player1.x;
-    positionBelow.y = player1.y-1000;
+    positionBelow.y = player1.y-10000;
     positionBelow.z = player1.z;
 
     //casts a ray from player to point below
@@ -236,7 +249,7 @@ function lookBelow(){
 function lookRight(){
     // creates a vector from the player to some point way below
     var positionBelow = new THREE.Vector3();
-    positionBelow.x = player1.x+1000;
+    positionBelow.x = player1.x+10000;
     positionBelow.y = player1.y;
     positionBelow.z = player1.z;
 
@@ -263,7 +276,7 @@ function lookRight(){
 function lookLeft(){
     // creates a vector from the player to some point way below
     var positionBelow = new THREE.Vector3();
-    positionBelow.x = player1.x-1000;
+    positionBelow.x = player1.x-10000;
     positionBelow.y = player1.y;
     positionBelow.z = player1.z;
 
