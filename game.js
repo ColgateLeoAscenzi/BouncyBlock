@@ -4,7 +4,8 @@ var Colors = {
     ground: 0x332609,
     golden: 0xebaf2a,
     white: 0xffffff,
-    grey: 0xb0a896
+    grey: 0xb0a896,
+    red:0xff1100
 };
 
 // THREEJS RELATED VARIABLES
@@ -17,6 +18,8 @@ var hitBoxesOn = false;
 var trackPlayer = true;
 var confettiOn = false;
 var mobileMode = false;
+
+var gameMode = "bounce";
 
 //TESTING RAYCASTING
 var raycaster = new THREE.Raycaster();
@@ -94,6 +97,8 @@ var blocks = [];
 var blockMeshes = [];
 var hitBoxes = [];
 var player1;
+var player1HitBoxMesh;
+var player1Mesh;
 
 var boxBelow;
 var boxAbove;
@@ -140,9 +145,9 @@ function createSimpleMap(){
   }
 
   var decide = 0;
-  for(var i = 3; i < 100; i+=2+Math.random()*2){
+  for(var i = 3; i < 99; i+=1+Math.random()*2){
 
-    if(i != 99){
+    if(i != 98){
       for(var j = -5; j < 6; j++){
         decide = Math.random();
         if(decide > 0.75){
@@ -151,22 +156,56 @@ function createSimpleMap(){
       }
     }
     else{
+      createBox(-2*basicBox.width, i*basicBox.height, 0, Colors.grey);
       createBox(-1*basicBox.width, i*basicBox.height, 0, Colors.grey);
       createBox(0*basicBox.width, i*basicBox.height, 0, Colors.grey);
       createBox(1*basicBox.width, i*basicBox.height, 0, Colors.grey);
+      createBox(2*basicBox.width, i*basicBox.height, 0, Colors.grey);
     }
 
 
   }
 
 }
+
+function createBounceMap(){
+  for(var i = -5; i < 6; i++){
+    if(i == -5 || i == 5){
+      createBox(i*basicBox.width, basicBox.height, 0, Colors.grey);
+      createBox(i*basicBox.width, basicBox.height*2, 0, Colors.grey);
+    }
+    if(i == 0){
+      createBox(i*basicBox.width, 0, 0, Colors.grey);
+      createBox(i*basicBox.width, basicBox.height*3, 0, Colors.grey);
+    }
+    else{
+      createBox(i*basicBox.width, 0, 0, Colors.grey);
+    }
+  }
+
+  var decide = 0;
+  for(var i = 3; i < 400; i+=9){
+      decide = -7 + Math.random()*14;
+      var colorchoice = Math.random()*0xffffff;
+      createBox(decide*basicBox.width, i*basicBox.height, 0, colorchoice);
+      createBox((decide+1)*basicBox.width, i*basicBox.height, 0, colorchoice);
+      createBox((decide+2)*basicBox.width, i*basicBox.height, 0,colorchoice);
+      createBox((decide+3)*basicBox.width, i*basicBox.height, 0, colorchoice);
+      createBox((decide+4)*basicBox.width, i*basicBox.height, 0, colorchoice);
+  }
+
+}
+
 function createPlayer1(x, y, z){
   player1 = basicCharacter;
   player1Mesh = player1.model;
-  // player1Mesh.position.set(x, y, z);
+  player1Mesh.material =  new THREE.MeshPhongMaterial(
+                             { color : 0x222222});
 
   player1HitBoxMesh = player1.hitBox;
-  // player1HitBoxMesh.position.set(x, y, z)
+
+
+  player1HitBoxMesh.position.set(x, y, z);
   hitBoxes.push(player1HitBoxMesh);
 
   scene.add(player1Mesh);
@@ -358,14 +397,28 @@ function initGame() {
   createScene();
 
   //Build a platform spreading across the x direction
-  createSimpleMap();
+  if(gameMode == "normal"){
+      createSimpleMap();
+
+  }
+  else if(gameMode == "bounce"){
+      createBounceMap();
+  }
   camera.lookAt(blocks[0].model.position.x,blocks[0].model.position.y+10,blocks[0].model.position.z);
 
   createPlayer1(0, 10, 0);
 
-  createConfetti();
+  if(gameMode == "normal"){
+      createConfetti();
+  }
 
   loop();
+}
+
+function resetGame(){
+    while(scene.children.length > 0){
+        scene.remove(scene.children[0]);
+    }
 }
 
 function handleTapDown(event){
@@ -469,6 +522,10 @@ function handleKeyDown(keyEvent){
        // }
    }
 
+   if(keyEvent.key == "`"){
+       resetGame();
+   }
+
 
    //player 1 control
    if(keyEvent.key == "a"){
@@ -492,6 +549,7 @@ function handleKeyDown(keyEvent){
        player1.jumpCt +=1;
        player1. onGround = false;
      }
+
    }
 
 }
@@ -502,12 +560,15 @@ function toggleHitBoxes(objArr, enable){
         for(var i = 0; i < objArr.length; i++){
             scene.add(objArr[i]);
         }
+
     }
     else{
         for(var i = 0; i < objArr.length; i++){
             scene.remove(objArr[i]);
         }
+
     }
+
 
 }
 

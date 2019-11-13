@@ -2,6 +2,8 @@ var basicCharacter = {
     x: 0,
     y: 10,
     z: 0,
+    height: 10,
+    width: 10,
     xVel: 0,
     yVel: 0,
     movingR: false,
@@ -20,7 +22,6 @@ var basicCharacter = {
     minLeft: -10,
     minRight: 10,
     update: function(){
-
         // checks and sets the lowsest current point
         if(boxBelow != undefined){
             this.minDown = boxBelow.position.y + 10;
@@ -44,24 +45,13 @@ var basicCharacter = {
         }
 
 
-        if(this.hitBoxEnabled){
-            this.hitBox.position.x = this.x;
-            this.hitBox.position.y = this.y;
-            this.hitBox.position.z = this.z;
-            scene.add(this.hitBox);
-        }
-        else{
-            scene.remove(this.hitBox);
-        }
-
 
         //maximum gravity acceleration
         if(this.yVel - 0.075 < -2.5){
             this.yVel = -2.5;
         }
-        // else{
-            this.yVel -= 0.075;
-        // }
+        this.yVel -= 0.075;
+
 
         //changes box position
         this.x += this.xVel;
@@ -84,10 +74,16 @@ var basicCharacter = {
 
         //doesn't let user pass below boxes
         if(this.y < this.minDown-0.2){
-         // this.yVel = -2+ Math.random()*4;
+            if(gameMode == "bounce"){
+                this.yVel = 4;
+
+            }
           this.y = this.minDown;
           this.canJump = true;
-          this.jumpCt = 0;
+          if(gameMode == "normal"){
+              this.jumpCt = 0;
+              
+          }
           this.onGround = true;
         }
         if(this.y < -40){
@@ -95,11 +91,11 @@ var basicCharacter = {
           this.y = 10;
           this.x = 0;
         }
-        if(this.x < this.minLeft-0.2){
+        if(this.x < this.minLeft){
           // this.xVel = 5+ Math.random()*10;
           this.x = this.minLeft;
         }
-        if(this.x > this.minRight+0.2){
+        if(this.x > this.minRight){
           // this.xVel = -5+ Math.random()*10;
           this.x = this.minRight;
         }
@@ -116,13 +112,25 @@ var basicCharacter = {
         this.hitBox.position.set(this.x, this.y, 0);
         document.getElementById("counter").innerHTML = "Current Floor: " + Math.floor(this.y/10);
 
-        if(this.model.position.y > 999){
-          alert("You Won!");
-          this.y = 10;
-          this.x = 0;
-          this.model.position.set(this.x, this.y, 0);
-          this.hitBox.position.set(this.x, this.y, 0);
+        if(gameMode == "normal"){
+            if(this.model.position.y > 999){
+              alert("You Won!");
+              this.y = 10;
+              this.x = 0;
+              this.model.position.set(this.x, this.y, 0);
+              this.hitBox.position.set(this.x, this.y, 0);
+            }
         }
+        else if(gameMode == "bounce"){
+            if( Math.floor(this.model.position.y/10) > 405){
+              alert("You Won!");
+              this.y = 10;
+              this.x = 0;
+              this.model.position.set(this.x, this.y, 0);
+              this.hitBox.position.set(this.x, this.y, 0);
+            }
+        }
+
 
 
 

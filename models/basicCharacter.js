@@ -13,7 +13,7 @@ function createBasicCharacterMesh(x,y,z){
 	  // Create the Cabin
   var geomBox = new THREE.BoxGeometry(10, 10, 10, 1, 1, 1);
   var matBox  = new THREE.MeshPhongMaterial(
-                             { color : Colors.black})
+                             { color : Colors.black, opacity: 0.5, transparent : true});
 
   var box = new THREE.Mesh(geomBox, matBox);
 
@@ -23,6 +23,8 @@ function createBasicCharacterMesh(x,y,z){
   this.mesh.add(box);
   this.mesh.position.set(x,y,z);
 
+  this.mesh.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1, 1, 1, 1), new THREE.MeshPhongMaterial(
+                             { color : Colors.black})));
 
   return this.mesh;
 
@@ -40,7 +42,6 @@ function createBasicCharacterBounding(x,y,z){
                              { color : Colors.red,wireframe: true});
 
   var box = new THREE.Mesh(geomBox, matBox);
-
   this.mesh.add(box);
   this.mesh.position.set(x,y,z);
 
