@@ -12,8 +12,10 @@ function createBasicCharacterMesh(x,y,z){
 
 	  // Create the Cabin
   var geomBox = new THREE.BoxGeometry(10, 10, 10, 1, 1, 1);
+  // var matBox  = new THREE.MeshPhongMaterial(
+  //                            { color : Colors.black, opacity: 0.5, transparent : true});
   var matBox  = new THREE.MeshPhongMaterial(
-                             { color : Colors.black, opacity: 0.5, transparent : true});
+                             { color : Colors.black});
 
   var box = new THREE.Mesh(geomBox, matBox);
 

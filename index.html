@@ -19,8 +19,14 @@
 <script src="game.js"></script>
 
 </head>
-<body onload = "initGame()">
-
+<body id = "body" onload = "getInput()">
+  <div id = "selectContainer">
+    <select id = "gameSelector">
+      <option>Select a GameMode</option>
+      <option value = "normal">The Climb</option>
+      <option value = "bounce">Bouncy Block</option>
+    </select>
+  </div>
 <div id = container>
 <div  height = 900 width = 1440  id="glcanvas"></div>
 <div id = "counter"></div>
