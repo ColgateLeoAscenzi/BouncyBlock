@@ -140,15 +140,23 @@ function createSimpleMap(){
   }
 
   var decide = 0;
-  for(var i = 3; i < 100; i+=2){
+  for(var i = 3; i < 100; i+=2+Math.random()*2){
 
-    for(var j = -5; j < 6; j++){
-      decide = Math.random();
-      if(decide > 0.8){
-        createBox(j*basicBox.width, i*basicBox.height, 0, Math.random()*0xffffff);
-
+    if(i != 99){
+      for(var j = -5; j < 6; j++){
+        decide = Math.random();
+        if(decide > 0.75){
+          createBox(j*basicBox.width, i*basicBox.height, 0, Math.random()*0xffffff);
+        }
       }
     }
+    else{
+      createBox(-1*basicBox.width, i*basicBox.height, 0, Colors.grey);
+      createBox(0*basicBox.width, i*basicBox.height, 0, Colors.grey);
+      createBox(1*basicBox.width, i*basicBox.height, 0, Colors.grey);
+    }
+
+
   }
 
 }
@@ -174,7 +182,7 @@ function createConfetti(){
           var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
           object.position.x = Math.random() * 800 - 400;
-          object.position.y = Math.random() * 800 - 400;
+          object.position.y = Math.random() * 1600 - 400;
           object.position.z = Math.random() * 800 - 400;
 
           object.rotation.x = Math.random() * 2 * Math.PI;
@@ -190,6 +198,12 @@ function createConfetti(){
 
       }
 }
+
+// function resetMap(){
+//   for(var i = 0; i < blocks[i]; i++){
+//     scene.remove(blocks[i].mesh);
+//   }
+// }
 
 function loop() {
   doUpdates();
@@ -237,6 +251,8 @@ function lookBelow(){
             if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
             INTERSECTED = intersects[ 0 ].object;
             INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            //top aint
+            // INTERSECTED.material.color.setHex( 0xff0000 );
             INTERSECTED.material.emissive.setHex( 0xff0000 );
             boxBelow = intersects[0].object;
         }

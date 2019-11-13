@@ -56,8 +56,8 @@ var basicCharacter = {
 
 
         //maximum gravity acceleration
-        if(this.yVel - 0.075 < -1.6){
-            this.yVel = -1.6;
+        if(this.yVel - 0.075 < -2.5){
+            this.yVel = -2.5;
         }
         // else{
             this.yVel -= 0.075;
@@ -83,7 +83,8 @@ var basicCharacter = {
 
 
         //doesn't let user pass below boxes
-        if(this.y < this.minDown){
+        if(this.y < this.minDown-0.2){
+         // this.yVel = -2+ Math.random()*4;
           this.y = this.minDown;
           this.canJump = true;
           this.jumpCt = 0;
@@ -94,10 +95,12 @@ var basicCharacter = {
           this.y = 10;
           this.x = 0;
         }
-        if(this.x < this.minLeft){
+        if(this.x < this.minLeft-0.2){
+          // this.xVel = 5+ Math.random()*10;
           this.x = this.minLeft;
         }
-        if(this.x > this.minRight){
+        if(this.x > this.minRight+0.2){
+          // this.xVel = -5+ Math.random()*10;
           this.x = this.minRight;
         }
         // if(this.x < -50){
@@ -112,6 +115,13 @@ var basicCharacter = {
         this.model.position.set(this.x, this.y, 0);
         this.hitBox.position.set(this.x, this.y, 0);
         document.getElementById("counter").innerHTML = "Current Floor: " + Math.floor(this.y/10);
+
+        if(this.model.position.y > 999){
+          alert("You Won!");
+          this.y = 10;
+          this.model.position.set(this.x, this.y, 0);
+          this.hitBox.position.set(this.x, this.y, 0);
+        }
 
 
 
