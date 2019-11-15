@@ -82,7 +82,7 @@ var basicCharacter = {
           this.canJump = true;
           if(gameMode == "normal"){
               this.jumpCt = 0;
-              
+
           }
           this.onGround = true;
         }
