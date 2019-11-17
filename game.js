@@ -100,10 +100,12 @@ var player1;
 var player1HitBoxMesh;
 var player1Mesh;
 
+
 var boxBelow;
 var boxAbove;
 var boxLeft;
 var boxRight;
+var drawRays = false;
 
 
 
@@ -265,96 +267,14 @@ function loop() {
     camera.lookAt(blocks[0].model.position.x,blocks[0].model.position.y+25,blocks[0].model.position.z);
   }
 
-  lookBelow();
-  lookRight()
-  lookLeft()
+  lookDirection([1,0,0]);
+  lookDirection([-1,0,0]);
+  lookDirection([0,1,0]);
+  lookDirection([0,-1,0]);
 
 
 }
 
-function lookBelow(){
-    // creates a vector from the player to some point way below
-    var positionBelow = new THREE.Vector3();
-    positionBelow.x = player1.x;
-    positionBelow.y = player1.y-10000;
-    positionBelow.z = player1.z;
-
-    //casts a ray from player to point below
-    raycaster.set(player1, positionBelow.normalize());
-
-    // calculate objects intersecting the picking ray
-    var intersects = raycaster.intersectObjects(blockMeshes);
-    // finds the intersections and colors them for testing, adds to the below box
-    if ( intersects.length > 0 ) {
-        if ( INTERSECTED != intersects[ 0 ].object ) {
-            if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-            INTERSECTED = intersects[ 0 ].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            //top aint
-            // INTERSECTED.material.color.setHex( 0xff0000 );
-            INTERSECTED.material.emissive.setHex( 0xff0000 );
-            boxBelow = intersects[0].object;
-        }
-    } else {
-        if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-        INTERSECTED = null;
-        boxBelow = undefined;
-    }
-}
-function lookRight(){
-    // creates a vector from the player to some point way below
-    var positionRight = new THREE.Vector3();
-    positionRight.x = player1.x+10000;
-    positionRight.y = player1.y;
-    positionRight.z = player1.z;
-
-    //casts a ray from player to point below
-    raycaster.set(player1, positionRight.normalize());
-
-    // calculate objects intersecting the picking ray
-    var intersects = raycaster.intersectObjects(blockMeshes);
-    // finds the intersections and colors them for testing, adds to the below box
-    if ( intersects.length > 0 ) {
-        if ( INTERSECTEDRIGHT != intersects[ 0 ].object ) {
-            if ( INTERSECTEDRIGHT ) INTERSECTEDRIGHT.material.emissive.setHex( INTERSECTEDRIGHT.currentHex );
-            INTERSECTEDRIGHT = intersects[ 0 ].object;
-            INTERSECTEDRIGHT.currentHex = INTERSECTEDRIGHT.material.emissive.getHex();
-            INTERSECTEDRIGHT.material.emissive.setHex( 0xff0000 );
-            boxRight = intersects[0].object;
-        }
-    } else {
-        if ( INTERSECTEDRIGHT ) INTERSECTEDRIGHT.material.emissive.setHex( INTERSECTEDRIGHT.currentHex );
-        INTERSECTEDRIGHT = null;
-        boxRight = undefined;
-    }
-}
-function lookLeft(){
-    // creates a vector from the player to some point way below
-    var positionLeft = new THREE.Vector3();
-    positionLeft.x = player1.x-10000;
-    positionLeft.y = player1.y;
-    positionLeft.z = player1.z;
-
-    //casts a ray from player to point below
-    raycaster.set(player1, positionLeft.normalize());
-
-    // calculate objects intersecting the picking ray
-    var intersects = raycaster.intersectObjects(blockMeshes);
-    // finds the intersections and colors them for testing, adds to the below box
-    if ( intersects.length > 0 ) {
-        if ( INTERSECTEDLEFT != intersects[ 0 ].object ) {
-            if ( INTERSECTEDLEFT ) INTERSECTEDLEFT.material.emissive.setHex( INTERSECTEDLEFT.currentHex );
-            INTERSECTEDLEFT = intersects[ 0 ].object;
-            INTERSECTEDLEFT.currentHex = INTERSECTEDLEFT.material.emissive.getHex();
-            INTERSECTEDLEFT.material.emissive.setHex( 0xff0000 );
-            boxLeft = intersects[0].object;
-        }
-    } else {
-        if ( INTERSECTEDLEFT ) INTERSECTEDLEFT.material.emissive.setHex( INTERSECTEDLEFT.currentHex );
-        INTERSECTEDLEFT = null;
-        boxLeft = undefined;
-    }
-}
 
 function doUpdates(){
   // updates all blocks
@@ -495,6 +415,7 @@ function handleKeyUp(keyEvent){
 function handleKeyDown(keyEvent){
 
    if(keyEvent.key == "h"){
+       drawRays = !drawRays;
        if(!hitBoxesOn){
            hitBoxesOn = true;
            console.log("hitboxes on");

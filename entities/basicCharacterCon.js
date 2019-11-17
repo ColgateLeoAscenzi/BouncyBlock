@@ -18,31 +18,42 @@ var basicCharacter = {
     jumpSpeed: 1.8,
     walkSpeed: 1,
     onGround: true,
-    minDown: 0,
-    minLeft: -10,
-    minRight: 10,
+    minDown: -100,
+    minLeft: -100,
+    minRight: 100,
+    minUp: 100,
     update: function(){
         // checks and sets the lowsest current point
         if(boxBelow != undefined){
-            this.minDown = boxBelow.position.y + 10;
+            this.minDown = boxBelow.position.y + 10/2 + player1.height/2;
         }
         else{
-            this.minDown = -100;
+            this.minDown = -1000;
         }
 
         if(boxLeft != undefined){
-            this.minLeft = boxLeft.position.x + 10;
+            this.minLeft = boxLeft.position.x + 10/2 + player1.width/2;
         }
         else{
-            this.minLeft = -100;
+            this.minLeft = -1000;
         }
 
         if(boxRight != undefined){
-            this.minRight = boxRight.position.x-10;
+            this.minRight = boxRight.position.x-10/2 - player1.width/2;
         }
         else{
-            this.minRight = 100;
+            this.minRight = 1000;
         }
+
+        if(gameMode != "bounce"){
+            if(boxAbove != undefined){
+              this.minUp = boxAbove.position.y - 10/2 - player1.height/2;
+            }
+            else{
+              this.minUp = 100000;
+            }
+        }
+
 
 
 
@@ -86,25 +97,27 @@ var basicCharacter = {
           }
           this.onGround = true;
         }
+        if(gameMode != "bounce"){
+            if(this.y > this.minUp){
+              this.y = this.minUp;
+              this.yVel = 0;
+            }
+        }
+
+        if(this.x < this.minLeft){
+          this.x = this.minLeft;
+        }
+        if(this.x > this.minRight){
+          this.x = this.minRight;
+        }
+
         if(this.y < -40){
           // alert("you died");
           this.y = 10;
           this.x = 0;
+          this.xVel = 0;
+          this.yVel = 0;
         }
-        if(this.x < this.minLeft){
-          // this.xVel = 5+ Math.random()*10;
-          this.x = this.minLeft;
-        }
-        if(this.x > this.minRight){
-          // this.xVel = -5+ Math.random()*10;
-          this.x = this.minRight;
-        }
-        // if(this.x < -50){
-        //   this.x = -50;
-        // }
-        // if(this.x > 50){
-        //   this.x = 50;
-        // }
 
 
         //updates models position and hitbox
